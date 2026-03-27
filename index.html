@@ -50,12 +50,17 @@ body{
     padding:6px 20px;
 }
 
-button{
+/* ===== ボタン統一スタイル ===== */
+button, .mode-btn{
     background:black;
     color:var(--main);
     border:1px solid var(--main);
     font-size:12px;
     box-shadow:0 0 5px var(--main);
+    border-radius:4px;
+    cursor:pointer;
+    padding:6px 12px;
+    text-align:center;
 }
 
 #generateBtn{
@@ -69,28 +74,14 @@ button{
     gap:6px;
 }
 
-/* ===== カスタムプルダウン ===== */
+/* ===== カスタムプルダウン（モード切替） ===== */
 .dropdown{
     position: relative;
     display: inline-block;
-    cursor: pointer;
 }
 
-.dropdown-toggle{
-    padding:6px 12px;
-    border:2px solid var(--main);
-    border-radius:6px;
-    background: var(--bg);
-    color: var(--main);
-    font-weight:bold;
-    text-align:center;
-    box-shadow:0 0 8px var(--main), 0 0 20px var(--accent);
-}
-
-.dropdown-toggle::after{
-    content:"▼";
-    float:right;
-    margin-left:6px;
+.mode-btn{
+    width:100%;
 }
 
 .dropdown-menu{
@@ -99,13 +90,12 @@ button{
     left:0;
     width:100%;
     background:var(--bg);
-    border:2px solid var(--accent);
-    border-radius:6px;
+    border:1px solid var(--main);
+    border-radius:4px;
     margin-top:4px;
     display:none;
     flex-direction: column;
     z-index:100;
-    box-shadow:0 0 10px var(--accent);
 }
 
 .dropdown-menu div{
@@ -113,7 +103,7 @@ button{
     text-align:center;
     font-weight:bold;
     color: var(--main);
-    border-bottom:1px solid var(--accent);
+    border-bottom:1px solid var(--main);
 }
 
 .dropdown-menu div:last-child{
@@ -205,7 +195,7 @@ button{
 <button id="generateBtn">Generate</button>
 
 <div class="dropdown">
-    <div class="dropdown-toggle" id="modeToggle">Cyberpunk</div>
+    <div class="mode-btn" id="modeToggle">Cyberpunk</div>
     <div class="dropdown-menu" id="modeMenu">
         <div data-mode="cyberpunk">Cyberpunk</div>
         <div data-mode="apocalypse">Apocalypse</div>
@@ -239,16 +229,13 @@ let favoritesData=JSON.parse(localStorage.getItem("favoritesData")||"[]");
 let lastGenerated=null;
 let showingFavorites=false;
 
-/* 保存関数 */
 function save(){
     localStorage.setItem("historyData",JSON.stringify(historyData));
     localStorage.setItem("favoritesData",JSON.stringify(favoritesData));
 }
 
-/* データ同値判定 */
 function isSame(a,b){ return JSON.stringify(a)===JSON.stringify(b); }
 
-/* 生成 */
 function generate(){
     const d=data[currentMode];
     const result={
@@ -281,7 +268,6 @@ function generate(){
     output.innerHTML=html;
 }
 
-/* お気に入り切替 */
 function toggleFavoriteByIndex(index, list){
     const item=list[index];
     const i=favoritesData.findIndex(f=>isSame(f,item));
@@ -297,7 +283,6 @@ function toggleFavoriteMain(){
     favBtn.innerText = favoritesData.some(f=>isSame(f,lastGenerated)) ? "★":"☆";
 }
 
-/* 履歴描画 */
 function renderList(data){
     let html="";
     data.forEach((item,i)=>{
@@ -325,7 +310,6 @@ function renderList(data){
     historyList.innerHTML=html;
 }
 
-/* 履歴画面 */
 function showHistory(){
     mainScreen.style.display="none";
     historyScreen.style.display="block";
@@ -345,7 +329,7 @@ function back(){
     mainScreen.style.display="block";
 }
 
-/* ===== カスタムドロップダウン ===== */
+/* カスタムドロップダウン */
 const toggle=document.getElementById("modeToggle");
 const menu=document.getElementById("modeMenu");
 
