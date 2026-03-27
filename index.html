@@ -8,125 +8,118 @@
 <style>
 body{
     margin:0;
-    background:black;
-    color:#00ffcc;
-    font-family:monospace;
     overflow:hidden;
+    background:#000;
+    color:#fff;
+    font-family:sans-serif;
     text-align:center;
 }
 
 /* タイトル */
-.title{
-    font-size:26px;
-    margin-top:20px;
-    margin-bottom:8px;
-    text-shadow:0 0 10px #00ffcc;
+#title{
+    font-size:2.5em;
+    margin-top:30px;
 }
 
-/* 画面切り替え */
-.screen{
-    display:none;
-}
-.active{
-    display:block;
-}
-
-/* ボタンエリア */
-.controls{
-    display:grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-rows: 38px 38px; /* 少し小さく */
-    gap:6px;
-    padding:6px;
+/* ボタン全体 */
+#controls{
+    width:90%;
+    margin:10px auto;
+    display:flex;
 }
 
-/* ボタン */
-button{
-    background:black;
-    color:#00ffcc;
-    border:1px solid #00ffcc;
-    font-size:12px;
-    text-align:center;
-    box-shadow:0 0 5px #00ffcc;
-}
-
-/* 配置 */
+/* Generate */
 #generateBtn{
-    grid-row:1 / span 2;
+    width:50%;
+    font-size:1em;
 }
 
-#historyBtn{
-    width:48%;
-    justify-self:start;
+/* 右側エリア */
+#rightArea{
+    width:50%;
+    display:flex;
+    flex-direction:column;
 }
 
-#favBtn{
-    width:48%;
-    justify-self:end;
+/* モード */
+#modeSelect{
+    height:50%;
+    font-size:0.9em;
+}
+
+/* 下段 */
+#bottomBtns{
+    height:50%;
+    display:flex;
+}
+
+#historyBtn, #favBtn{
+    width:50%;
+    font-size:0.9em;
+}
+
+/* 共通ボタン */
+button, select{
+    background:#111;
+    color:#fff;
+    border:1px solid #555;
 }
 
 /* 出力 */
 #output{
-    margin-top:6px;
-    font-size:16px;
-    line-height:1.6;
+    margin-top:10px;
+    font-size:1.2em;
 }
 
-/* ブロック */
-.block{
-    margin-bottom:6px;
-}
-
-.label{
-    color:#ff2bd6;
-    font-size:12px;
-    text-shadow:0 0 6px #ff2bd6;
-    margin-bottom:1px;
-}
-
-.value{
-    font-size:18px;
+/* 見出し */
+.section-title{
+    color:#ff4dff;
+    font-size:0.9em;
+    margin-top:10px;
+    margin-bottom:2px;
 }
 
 /* 履歴画面 */
 #historyScreen{
-    padding:10px;
+    display:none;
+    position:absolute;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:#000;
 }
 
-/* 戻るボタン */
 #backBtn{
     position:absolute;
     top:10px;
     left:10px;
-}
-
-/* カード */
-.card{
-    border:1px solid #00ffcc;
-    margin-bottom:8px;
-    padding:6px;
-    font-size:12px;
-}
-.time{
-    font-size:10px;
-    margin-bottom:4px;
-    color:#888;
 }
 </style>
 </head>
 
 <body>
 
-<!-- 生成画面 -->
-<div id="mainScreen" class="screen active">
+<div id="mainScreen">
 
-<div class="title">City Generator</div>
+<div id="title">City Generator</div>
 
-<div class="controls">
+<div id="controls">
     <button id="generateBtn">Generate</button>
-    <button id="modeBtn">Mode</button>
-    <button id="historyBtn">History</button>
-    <button id="favBtn">⭐</button>
+
+    <div id="rightArea">
+        <select id="modeSelect">
+            <option value="cyber">Cyber</option>
+            <option value="fantasy">Fantasy</option>
+            <option value="real">Real</option>
+            <option value="ruin">Ruin</option>
+        </select>
+
+        <div id="bottomBtns">
+            <button id="historyBtn">History</button>
+            <button id="favBtn">⭐︎</button>
+        </div>
+    </div>
 </div>
 
 <div id="output"></div>
@@ -134,95 +127,89 @@ button{
 </div>
 
 <!-- 履歴画面 -->
-<div id="historyScreen" class="screen">
+<div id="historyScreen">
     <button id="backBtn">戻る</button>
-    <h2>History</h2>
     <div id="historyList"></div>
 </div>
 
 <script src="data.js"></script>
 
 <script>
-let currentMode = "cyberpunk";
-let historyData = [];
+let history = [];
 
-/* ランダム */
-function pick(arr){
-    return arr[Math.floor(Math.random()*arr.length)];
+/* モードカラー */
+function applyMode(mode){
+    const body = document.body;
+
+    switch(mode){
+        case "cyber":
+            body.style.background = "#000";
+            body.style.color = "#0ff";
+            break;
+        case "fantasy":
+            body.style.background = "#1a0033";
+            body.style.color = "#ffccff";
+            break;
+        case "real":
+            body.style.background = "#222";
+            body.style.color = "#fff";
+            break;
+        case "ruin":
+            body.style.background = "#111";
+            body.style.color = "#888";
+            break;
+    }
 }
 
 /* 生成 */
 function generate(){
-    const d = data[currentMode];
+    const mode = document.getElementById("modeSelect").value;
+    applyMode(mode);
 
-    const result = {
-        建築: pick(d.architecture),
-        環境: pick(d.environment),
-        社会: pick(d.society),
-        雰囲気: pick(d.mood),
-        地区: pick(d.district),
-        施設: pick(d.facility),
-        職業: pick(d.jobs),
-        事件: pick(d.incidents),
-        主要人物: pick(d.characters),
-        time: new Date().toLocaleString()
-    };
+    const arch = getRandom(data.architecture);
+    const env = getRandom(data.environment);
 
-    historyData.unshift(result);
+    const html = `
+    <div class="section">
+        <div class="section-title">建築</div>
+        <div>${arch}</div>
+    </div>
 
-    let html = "";
-    for(let key in result){
-        if(key === "time") continue;
-        html += `
-        <div class="block">
-            <div class="label">${key}</div>
-            <div class="value">${result[key]}</div>
-        </div>`;
-    }
+    <div class="section">
+        <div class="section-title">環境</div>
+        <div>${env}</div>
+    </div>
+    `;
 
     document.getElementById("output").innerHTML = html;
+
+    history.push(html);
 }
 
-/* モード */
-function toggleMode(){
-    currentMode = (currentMode === "cyberpunk") ? "apocalypse" : "cyberpunk";
+/* ランダム */
+function getRandom(arr){
+    return arr[Math.floor(Math.random()*arr.length)];
 }
 
 /* 履歴表示 */
 function showHistory(){
-    document.getElementById("mainScreen").classList.remove("active");
-    document.getElementById("historyScreen").classList.add("active");
+    document.getElementById("mainScreen").style.display="none";
+    document.getElementById("historyScreen").style.display="block";
 
-    let html = "";
-
-    historyData.forEach(item=>{
-        html += `<div class="card">
-        <div class="time">${item.time}</div>`;
-
-        for(let key in item){
-            if(key === "time") continue;
-            html += `<div>${key}: ${item[key]}</div>`;
-        }
-
-        html += `</div>`;
-    });
-
-    document.getElementById("historyList").innerHTML = html;
+    const list = document.getElementById("historyList");
+    list.innerHTML = history.map(h => `<div>${h}</div>`).join("");
 }
 
 /* 戻る */
 function back(){
-    document.getElementById("historyScreen").classList.remove("active");
-    document.getElementById("mainScreen").classList.add("active");
+    document.getElementById("mainScreen").style.display="block";
+    document.getElementById("historyScreen").style.display="none";
 }
 
 /* イベント */
-generateBtn.onclick = generate;
-modeBtn.onclick = toggleMode;
-historyBtn.onclick = showHistory;
-backBtn.onclick = back;
-favBtn.onclick = ()=>alert("お気に入り未実装");
-
+document.getElementById("generateBtn").onclick = generate;
+document.getElementById("historyBtn").onclick = showHistory;
+document.getElementById("backBtn").onclick = back;
 </script>
 
 </body>
