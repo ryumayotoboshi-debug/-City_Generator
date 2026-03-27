@@ -12,21 +12,22 @@ body{
     color:#00ffcc;
     font-family:monospace;
     overflow:hidden;
+    text-align:center; /* 全体中央 */
 }
 
 /* タイトル */
 .title{
-    text-align:center;
-    font-size:16px;
-    padding:6px 0;
-    border-bottom:1px solid #00ffcc;
+    font-size:26px; /* 大きく */
+    margin-top:20px; /* 上余白増加 */
+    margin-bottom:10px;
+    text-shadow:0 0 10px #00ffcc;
 }
 
-/* 上部ボタンエリア */
+/* ボタンエリア */
 .controls{
     display:grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 40px 40px;
+    grid-template-rows: 45px 45px;
     gap:6px;
     padding:6px;
 }
@@ -36,12 +37,14 @@ button{
     background:black;
     color:#00ffcc;
     border:1px solid #00ffcc;
-    font-size:12px;
+    font-size:13px;
+    text-align:center;
+    box-shadow:0 0 5px #00ffcc;
 }
 
 /* 配置 */
 #generateBtn{
-    grid-row:1 / span 2; /* 左側を縦に2マス使用 */
+    grid-row:1 / span 2;
     grid-column:1;
 }
 
@@ -53,21 +56,40 @@ button{
 #historyBtn{
     grid-row:2;
     grid-column:2;
+    width:48%;
+    justify-self:start;
 }
 
 #favBtn{
     grid-row:2;
     grid-column:2;
+    width:48%;
     justify-self:end;
-    width:45%;
 }
 
-/* 出力 */
+/* 出力エリア */
 #output{
-    font-size:11px;
-    white-space:pre-wrap;
-    padding:8px;
-    line-height:1.4;
+    margin-top:10px;
+    font-size:16px; /* 大きく */
+    line-height:1.8;
+}
+
+/* 各項目 */
+.block{
+    margin-bottom:12px;
+}
+
+/* 見出し */
+.label{
+    color:#ff2bd6; /* ピンクネオン */
+    font-size:12px;
+    text-shadow:0 0 6px #ff2bd6;
+}
+
+/* 内容 */
+.value{
+    font-size:18px;
+    margin-top:2px;
 }
 </style>
 </head>
@@ -90,7 +112,7 @@ button{
 <script>
 let currentMode = "cyberpunk";
 
-/* ランダム取得 */
+/* ランダム */
 function pick(arr){
     return arr[Math.floor(Math.random()*arr.length)];
 }
@@ -99,21 +121,57 @@ function pick(arr){
 function generate(){
     const d = data[currentMode];
 
-    const result =
-`建築: ${pick(d.architecture)}
-環境: ${pick(d.environment)}
-社会: ${pick(d.society)}
-雰囲気: ${pick(d.mood)}
-地区: ${pick(d.district)}
-施設: ${pick(d.facility)}
-職業: ${pick(d.jobs)}
-事件: ${pick(d.incidents)}
-主要人物: ${pick(d.characters)}`;
+    const resultHTML = `
+<div class="block">
+<div class="label">建築</div>
+<div class="value">${pick(d.architecture)}</div>
+</div>
 
-    document.getElementById("output").textContent = result;
+<div class="block">
+<div class="label">環境</div>
+<div class="value">${pick(d.environment)}</div>
+</div>
+
+<div class="block">
+<div class="label">社会</div>
+<div class="value">${pick(d.society)}</div>
+</div>
+
+<div class="block">
+<div class="label">雰囲気</div>
+<div class="value">${pick(d.mood)}</div>
+</div>
+
+<div class="block">
+<div class="label">地区</div>
+<div class="value">${pick(d.district)}</div>
+</div>
+
+<div class="block">
+<div class="label">施設</div>
+<div class="value">${pick(d.facility)}</div>
+</div>
+
+<div class="block">
+<div class="label">職業</div>
+<div class="value">${pick(d.jobs)}</div>
+</div>
+
+<div class="block">
+<div class="label">事件</div>
+<div class="value">${pick(d.incidents)}</div>
+</div>
+
+<div class="block">
+<div class="label">主要人物</div>
+<div class="value">${pick(d.characters)}</div>
+</div>
+`;
+
+    document.getElementById("output").innerHTML = resultHTML;
 }
 
-/* モード切替（仮：2種） */
+/* モード切替（仮） */
 function toggleMode(){
     currentMode = (currentMode === "cyberpunk") ? "apocalypse" : "cyberpunk";
 }
