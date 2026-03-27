@@ -7,6 +7,8 @@
 <title>City Generator</title>
 
 <link rel="manifest" href="manifest.json">
+<link rel="icon" href="IMG_6157.png">
+<link rel="apple-touch-icon" href="IMG_6157.png">
 
 <style>
 
@@ -238,6 +240,13 @@ let favoritesData=JSON.parse(localStorage.getItem("favoritesData")||"[]");
 let lastGenerated=null;
 let showingFavorites=false;
 
+const modeLabels = {
+  cyberpunk: ["建築","環境","社会","雰囲気","地区","施設","職業","事件","主要人物"],
+  apocalypse: ["建築","環境","社会","雰囲気","地区","施設","職業","事件","主要人物"],
+  synthwave: ["建築","環境","社会","雰囲気","地区","施設","職業","事件","主要人物"],
+  dreamcore: ["建築","環境","社会","雰囲気","地区","施設","職業","事件","主要人物"]
+};
+
 function save(){
     localStorage.setItem("historyData",JSON.stringify(historyData));
     localStorage.setItem("favoritesData",JSON.stringify(favoritesData));
@@ -266,12 +275,13 @@ function generate(){
     favBtn.innerText = favoritesData.some(f=>isSame(f,result)) ? "★" : "☆";
 
     let html="";
-    for(let k in result){
-        if(k==="mode"||k==="time")continue;
+    const labels = modeLabels[currentMode];
+    const keys = ["建築","環境","社会","雰囲気","地区","施設","職業","事件","主要人物"];
+    for(let i=0;i<keys.length;i++){
         html+=`
         <div class="group">
-        <div class="label">${k}</div>
-        <div class="value">${result[k]}</div>
+        <div class="label">${labels[i]}</div>
+        <div class="value">${result[keys[i]]}</div>
         </div>`;
     }
     output.innerHTML=html;
@@ -296,6 +306,8 @@ function renderList(data){
     let html="";
     data.forEach((item,i)=>{
         const isFav=favoritesData.some(f=>isSame(f,item));
+        const labels = modeLabels[item.mode];
+        const keys = ["建築","環境","社会","雰囲気","地区","施設","職業","事件","主要人物"];
         html+=`
         <div class="card ${item.mode}">
         <div class="cardFav" onclick="toggleFavoriteByIndex(${i},${showingFavorites?'favoritesData':'historyData'})">
@@ -303,18 +315,11 @@ function renderList(data){
         </div>
         <div>${item.time}</div>
         <div class="cardContent">
-        <div>
-        <div class="label">建築</div><div>${item.建築}</div>
-        <div class="label">環境</div><div>${item.環境}</div>
-        <div class="label">社会</div><div>${item.社会}</div>
-        </div>
-        <div>
-        <div class="label">施設</div><div>${item.施設}</div>
-        <div class="label">事件</div><div>${item.事件}</div>
-        <div class="label">主要人物</div><div>${item.主要人物}</div>
-        </div>
-        </div>
-        </div>`;
+        <div>`;
+        for(let j=0;j<keys.length;j++){
+            html+=`<div class="label">${labels[j]}</div><div>${item[keys[j]]}</div>`;
+        }
+        html+=`</div></div></div>`;
     });
     historyList.innerHTML=html;
 }
