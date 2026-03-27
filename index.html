@@ -6,12 +6,11 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=7">
-<link rel="icon" href="IMG_6157.png?v=7" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=7">
+<link rel="manifest" href="manifest.json?v=8">
+<link rel="icon" href="IMG_6157.png?v=8" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=8">
 
 <style>
-/* ===== モードカラー ===== */
 :root{
     --main:#00ffcc;
     --accent:#ff2bd6;
@@ -69,7 +68,7 @@ button{
     gap:6px;
 }
 
-/* ===== カスタムプルダウン ===== */
+/* カスタムプルダウン */
 .dropdown{
     position: relative;
     display: inline-block;
@@ -123,7 +122,7 @@ button{
     color: var(--bg);
 }
 
-/* ===== 出力 ===== */
+/* 出力 */
 #output{ margin-top:24px; }
 
 .group{ margin-bottom:10px; }
@@ -134,11 +133,11 @@ button{
 }
 
 .value{
-    font-size:16px; /* 少し大きく */
+    font-size:14px; /* 少し小さく */
     color:var(--main);
 }
 
-/* ===== 履歴 ===== */
+/* 履歴画面 */
 #historyScreen{
     padding:10px;
     height:100vh;
@@ -170,25 +169,24 @@ button{
     position:absolute;
     top:6px;
     right:8px;
-    font-size:26px; /* 少し大きく */
+    font-size:26px; /* 大きめ */
     cursor:pointer;
 }
 
 .cardTime{
-    font-size:10px; /* 少し大きく */
+    font-size:10px;
     position:absolute;
     right:6px;
     bottom:4px;
 }
 
-/* 都市カード内容を左右2カラム */
 .cardContent{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:6px;
 }
 
-/* ★履歴カードの文字色を生成時モードに完全連動 */
+/* 履歴カード文字色をモードに連動 */
 .card.cyberpunk .label{ color:#FF00FF; }
 .card.cyberpunk .value{ color:#00FFFF; }
 
