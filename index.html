@@ -76,8 +76,15 @@ button, select{
     color:var(--main);
     border:1px solid var(--main);
     font-size:12px;
-    text-align:center;
+    text-align:center; /* ←中央配置 */
     box-shadow:0 0 5px var(--main);
+}
+
+/* selectの中央寄せを強化 */
+#modeSelect{
+    width:100%;
+    text-align:center;
+    text-align-last:center;
 }
 
 /* Generate */
@@ -85,12 +92,7 @@ button, select{
     grid-row:1 / span 2;
 }
 
-/* Mode（select化） */
-#modeSelect{
-    width:100%;
-}
-
-/* 下段ボタン共通サイズ */
+/* 下段ボタン（サイズ統一） */
 #historyBtn,
 #favBtn{
     width:48%;
@@ -119,8 +121,9 @@ button, select{
     margin-bottom:1px;
 }
 
+/* ★ フォントサイズ縮小 */
 .value{
-    font-size:18px;
+    font-size:14px;
 }
 
 /* 履歴画面 */
@@ -141,7 +144,9 @@ button, select{
     margin-bottom:8px;
     padding:6px;
     font-size:12px;
+    text-align:left; /* ← 左揃え */
 }
+
 .time{
     font-size:10px;
     margin-bottom:4px;
@@ -161,7 +166,6 @@ button, select{
 <div class="controls">
     <button id="generateBtn">Generate</button>
 
-    <!-- Mode（プルダウン） -->
     <select id="modeSelect">
         <option value="cyberpunk">Cyberpunk</option>
         <option value="apocalypse">Apocalypse</option>
@@ -227,12 +231,10 @@ function generate(){
     document.getElementById("output").innerHTML = html;
 }
 
-/* モード変更（プルダウン対応＋カラー変更） */
+/* モード変更 */
 function changeMode(){
     const select = document.getElementById("modeSelect");
     currentMode = select.value;
-
-    /* bodyのクラスを切り替え */
     document.body.className = currentMode;
 }
 
