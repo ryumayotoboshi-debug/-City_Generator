@@ -84,9 +84,9 @@ button, select{
 
 .block{ margin-bottom:6px; }
 
-/* ★建築のpadding上を拡張 */
+/* ★余白をさらに拡張 */
 .block:first-child .label{
-    padding-top:10px;
+    padding-top:18px;
 }
 
 .label{
@@ -101,24 +101,34 @@ button, select{
 }
 
 /* ===== 履歴 ===== */
-#historyScreen{ padding:10px; }
+#historyScreen{
+    padding:10px;
+}
 
+/* 戻る */
 #backBtn{
     position:absolute;
     top:10px;
     left:10px;
 }
 
+/* ★お気に入りボタン追加 */
+#favHistoryBtn{
+    position:absolute;
+    top:10px;
+    right:10px;
+}
+
 /* カード */
 .card{
     border:1px solid;
-    margin-bottom:8px;
-    padding:6px;
-    font-size:12px;
+    margin-bottom:12px;
+    padding:10px; /* ★拡大 */
+    font-size:13px; /* ★少し大きく */
     text-align:left;
 }
 
-/* モード別カード色 */
+/* モード別 */
 .card.cyberpunk{ border-color:#00ffcc; color:#00ffcc; }
 .card.apocalypse{ border-color:#ff4444; color:#ff4444; }
 .card.synthwave{ border-color:#ff66cc; color:#ff66cc; }
@@ -126,7 +136,7 @@ button, select{
 
 .time{
     font-size:10px;
-    margin-bottom:4px;
+    margin-bottom:6px;
     color:#888;
 }
 
@@ -134,13 +144,17 @@ button, select{
 .cardContent{
     display:grid;
     grid-template-columns: 1fr 1fr;
-    gap:6px;
+    gap:8px;
 }
 
-/* ★履歴内の見出し色を統一 */
+/* ★見出しと内容の間を縮小 */
 .cardContent .label{
-    color:var(--accent);
-    text-shadow:0 0 6px var(--accent);
+    margin-bottom:0px;
+}
+
+/* 内容の余白も軽く調整 */
+.cardContent div{
+    margin-bottom:2px;
 }
 
 </style>
@@ -175,6 +189,7 @@ button, select{
 <!-- 履歴画面 -->
 <div id="historyScreen" class="screen">
     <button id="backBtn">戻る</button>
+    <button id="favHistoryBtn">⭐ お気に入り</button>
     <h2>History</h2>
     <div id="historyList"></div>
 </div>
@@ -271,6 +286,7 @@ modeSelect.onchange = changeMode;
 historyBtn.onclick = showHistory;
 backBtn.onclick = back;
 favBtn.onclick = ()=>alert("お気に入り未実装");
+favHistoryBtn.onclick = ()=>alert("お気に入り一覧未実装");
 
 </script>
 
