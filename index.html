@@ -7,37 +7,17 @@
 
 <style>
 
-/* ===== モードカラー変数 ===== */
+/* ===== モードカラー ===== */
 :root{
     --main:#00ffcc;
     --accent:#ff2bd6;
     --bg:black;
 }
 
-/* ===== モード別テーマ ===== */
-body.cyberpunk{
-    --main:#00ffcc;
-    --accent:#ff2bd6;
-    --bg:black;
-}
-
-body.apocalypse{
-    --main:#ff4444;
-    --accent:#ffaa00;
-    --bg:#1a0000;
-}
-
-body.future{
-    --main:#66aaff;
-    --accent:#ffffff;
-    --bg:#001122;
-}
-
-body.fantasy{
-    --main:#66ff99;
-    --accent:#cc66ff;
-    --bg:#001a00;
-}
+body.cyberpunk{ --main:#00ffcc; --accent:#ff2bd6; --bg:black; }
+body.apocalypse{ --main:#ff4444; --accent:#ffaa00; --bg:#1a0000; }
+body.future{ --main:#66aaff; --accent:#ffffff; --bg:#001122; }
+body.fantasy{ --main:#66ff99; --accent:#cc66ff; --bg:#001a00; }
 
 /* ===== 基本 ===== */
 body{
@@ -57,11 +37,11 @@ body{
     text-shadow:0 0 10px var(--main);
 }
 
-/* 画面切り替え */
+/* 画面 */
 .screen{ display:none; }
 .active{ display:block; }
 
-/* ボタンエリア */
+/* ===== 親グリッド ===== */
 .controls{
     display:grid;
     grid-template-columns: 1fr 1fr;
@@ -70,21 +50,15 @@ body{
     padding:6px;
 }
 
-/* ボタン共通 */
+/* 共通 */
 button, select{
     background:black;
     color:var(--main);
     border:1px solid var(--main);
     font-size:12px;
-    text-align:center; /* ←中央配置 */
-    box-shadow:0 0 5px var(--main);
-}
-
-/* selectの中央寄せを強化 */
-#modeSelect{
-    width:100%;
     text-align:center;
     text-align-last:center;
+    box-shadow:0 0 5px var(--main);
 }
 
 /* Generate */
@@ -92,15 +66,17 @@ button, select{
     grid-row:1 / span 2;
 }
 
-/* 下段ボタン（サイズ統一） */
-#historyBtn,
-#favBtn{
-    width:48%;
+/* Mode */
+#modeSelect{
+    width:100%;
 }
 
-/* 左右配置 */
-#historyBtn{ justify-self:start; }
-#favBtn{ justify-self:end; }
+/* ===== 右下エリア（←追加ポイント） ===== */
+.bottomRight{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:6px;
+}
 
 /* 出力 */
 #output{
@@ -109,10 +85,7 @@ button, select{
     line-height:1.6;
 }
 
-/* ブロック */
-.block{
-    margin-bottom:6px;
-}
+.block{ margin-bottom:6px; }
 
 .label{
     color:var(--accent);
@@ -121,30 +94,25 @@ button, select{
     margin-bottom:1px;
 }
 
-/* ★ フォントサイズ縮小 */
 .value{
     font-size:14px;
 }
 
-/* 履歴画面 */
-#historyScreen{
-    padding:10px;
-}
+/* 履歴 */
+#historyScreen{ padding:10px; }
 
-/* 戻るボタン */
 #backBtn{
     position:absolute;
     top:10px;
     left:10px;
 }
 
-/* カード */
 .card{
     border:1px solid var(--main);
     margin-bottom:8px;
     padding:6px;
     font-size:12px;
-    text-align:left; /* ← 左揃え */
+    text-align:left;
 }
 
 .time{
@@ -158,7 +126,6 @@ button, select{
 
 <body class="cyberpunk">
 
-<!-- 生成画面 -->
 <div id="mainScreen" class="screen active">
 
 <div class="title">City Generator</div>
@@ -173,8 +140,11 @@ button, select{
         <option value="fantasy">Fantasy</option>
     </select>
 
-    <button id="historyBtn">History</button>
-    <button id="favBtn">⭐</button>
+    <!-- ★ここがポイント -->
+    <div class="bottomRight">
+        <button id="historyBtn">History</button>
+        <button id="favBtn">⭐</button>
+    </div>
 </div>
 
 <div id="output"></div>
@@ -194,12 +164,10 @@ button, select{
 let currentMode = "cyberpunk";
 let historyData = [];
 
-/* ランダム */
 function pick(arr){
     return arr[Math.floor(Math.random()*arr.length)];
 }
 
-/* 生成 */
 function generate(){
     const d = data[currentMode];
 
@@ -231,14 +199,12 @@ function generate(){
     document.getElementById("output").innerHTML = html;
 }
 
-/* モード変更 */
 function changeMode(){
     const select = document.getElementById("modeSelect");
     currentMode = select.value;
     document.body.className = currentMode;
 }
 
-/* 履歴表示 */
 function showHistory(){
     document.getElementById("mainScreen").classList.remove("active");
     document.getElementById("historyScreen").classList.add("active");
@@ -260,13 +226,11 @@ function showHistory(){
     document.getElementById("historyList").innerHTML = html;
 }
 
-/* 戻る */
 function back(){
     document.getElementById("historyScreen").classList.remove("active");
     document.getElementById("mainScreen").classList.add("active");
 }
 
-/* イベント */
 generateBtn.onclick = generate;
 modeSelect.onchange = changeMode;
 historyBtn.onclick = showHistory;
