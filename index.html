@@ -5,74 +5,115 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>City Generator</title>
 
+<!-- data.js 読み込み -->
+<script src="data.js"></script>
+
 <style>
+
+/* ===== 全体 ===== */
 body{
   background:#000;
   color:#fff;
   font-family:sans-serif;
-  text-align:center;
   margin:0;
+  overflow:hidden; /* ←スクロールバー削除 */
 }
 
-/* タイトル */
+/* ===== タイトル ===== */
 h1{
-  font-size:40px;
-  margin-top:40px;
+  text-align:center;
+  margin-top:30px;
   text-shadow:0 0 10px #0ff,0 0 20px #0ff;
 }
 
-/* ボタン共通 */
+/* ===== レイアウト ===== */
+.container{
+  display:flex;
+  justify-content:center;
+  margin-top:30px;
+}
+
+/* 左（Generate） */
+.left{
+  margin-right:20px;
+}
+
+/* 右（モード・ボタン群） */
+.right{
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+
+/* ===== ボタン共通 ===== */
 button, select{
   background:#000;
   border:2px solid #0ff;
   color:#0ff;
-  padding:15px;
-  margin:10px;
-  font-size:18px;
   border-radius:10px;
   box-shadow:0 0 10px #0ff;
 }
 
-/* 大ボタン */
-.big{
+/* ===== Generate ===== */
+.generate{
   width:200px;
-  height:120px;
+  height:180px; /* ←右側と高さ合わせ */
   font-size:24px;
 }
 
-/* 結果表示 */
+/* ===== モード ===== */
+.mode{
+  width:200px;
+  height:70px;
+}
+
+/* ===== 下ボタン群 ===== */
+.bottom{
+  display:flex;
+  gap:10px;
+}
+
+.smallBtn{
+  width:95px;
+  height:70px;
+  font-size:16px;
+}
+
+/* ===== 結果 ===== */
 .result{
+  text-align:center;
   margin-top:30px;
 }
 
 .label{
   color:#f0f;
-  font-size:14px;
+  font-size:12px;
 }
 
 .value{
-  font-size:22px;
-  text-shadow:0 0 10px #0ff;
-  margin-bottom:10px;
+  font-size:18px; /* ←小さくした */
+  text-shadow:0 0 8px #0ff;
+  margin-bottom:8px;
 }
 
-/* 画面切替 */
-.screen{
-  display:none;
-}
-.active{
-  display:block;
+/* ===== 画面切替 ===== */
+.screen{ display:none; }
+.active{ display:block; }
+
+/* ===== 履歴 ===== */
+#historyScreen{
+  padding:10px;
 }
 
-/* 履歴カード */
 .card{
   border:2px solid #0ff;
-  margin:15px;
-  padding:15px;
   border-radius:10px;
+  padding:10px;
+  margin-bottom:10px;
   box-shadow:0 0 10px #0ff;
-  text-align:left;
+  font-size:14px;
 }
+
 </style>
 </head>
 
@@ -83,23 +124,37 @@ button, select{
 
 <h1 id="title">City Generator</h1>
 
-<button class="big" onclick="generate()">Generate</button>
+<div class="container">
 
-<br>
+  <!-- 左 -->
+  <div class="left">
+    <button class="generate" onclick="generate()">Generate</button>
+  </div>
 
-<select id="modeSelect" onchange="changeMode()">
-<option>Cyberpunk</option>
-<option>Apocalypse</option>
-<option>Synthwave</option>
-<option>Dreamcore</option>
-</select>
+  <!-- 右 -->
+  <div class="right">
 
-<button onclick="showHistory()">History</button>
+    <!-- 上：モード -->
+    <select id="modeSelect" class="mode" onchange="changeMode()">
+      <option>Cyberpunk</option>
+      <option>Apocalypse</option>
+      <option>Synthwave</option>
+      <option>Dreamcore</option>
+    </select>
 
-<div class="result" id="resultArea"></div>
+    <!-- 下：ボタン -->
+    <div class="bottom">
+      <button class="smallBtn" onclick="showHistory()">History</button>
+      <button class="smallBtn" onclick="favorite()">⭐</button>
+    </div>
+
+  </div>
 
 </div>
 
+<div id="resultArea" class="result"></div>
+
+</div>
 
 <!-- ===== 履歴画面 ===== -->
 <div id="historyScreen" class="screen">
@@ -114,27 +169,16 @@ button, select{
 
 <script>
 
-// ===== データ =====
-const data = {
-  建築:["全周スクリーン塔","工業コンプレックス","都市内ドーム構造"],
-  環境:["照明の色変化","ネオンの夜","過剰な光量"],
-  社会:["広告洗脳社会","AI自治体","情報検閲社会"],
-  雰囲気:["迷路都市","不安定な秩序","電光舞う"],
-  地区:["都市制御補助区","浮遊商業区","量子演算区"],
-  施設:["企業監視センター","ドローン修理工房","電脳訓練施設"],
-  職業:["情報屋","ドローン整備士","人格再構築士"],
-  事件:["AI同士の衝突","銀行ハック","仮想世界崩壊"],
-  人物:["情報商人","市場の商人","記録を探す人"]
-};
-
-// 履歴
+/* ===== 状態 ===== */
 let history = [];
+let lastResult = null;
 
-// ===== ランダム生成 =====
+/* ===== ランダム ===== */
 function random(arr){
   return arr[Math.floor(Math.random()*arr.length)];
 }
 
+/* ===== 生成 ===== */
 function generate(){
 
   const result = {};
@@ -143,7 +187,8 @@ function generate(){
     result[key] = random(data[key]);
   }
 
-  // 表示
+  lastResult = result;
+
   const area = document.getElementById("resultArea");
   area.innerHTML = "";
 
@@ -154,14 +199,23 @@ function generate(){
     `;
   }
 
-  // 履歴保存
   result.time = new Date().toLocaleString();
-  history.unshift(result);
+  result.mode = document.getElementById("modeSelect").value;
 
+  history.unshift(result);
 }
 
+/* ===== お気に入り ===== */
+function favorite(){
 
-// ===== モード変更 =====
+  if(!lastResult) return;
+
+  alert("お気に入りに追加しました（仮）");
+
+  // 将来的にはフラグ追加など
+}
+
+/* ===== モード変更 ===== */
 function changeMode(){
 
   const mode = document.getElementById("modeSelect").value;
@@ -182,8 +236,7 @@ function changeMode(){
     `0 0 10px ${color},0 0 20px ${color}`;
 }
 
-
-// ===== 履歴画面 =====
+/* ===== 履歴 ===== */
 function showHistory(){
 
   document.getElementById("generateScreen").classList.remove("active");
@@ -193,7 +246,7 @@ function showHistory(){
   list.innerHTML = "";
 
   history.forEach(h=>{
-    let html = `<div class="card"><b>City</b><br>`;
+    let html = `<div class="card"><b>${h.mode} City</b><br>`;
     for(let key in data){
       html += `${key}: ${h[key]}<br>`;
     }
