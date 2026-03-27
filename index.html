@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>City Generator</title>
+
+<style>
+body{
+  background:#000;
+  color:#fff;
+  font-family:sans-serif;
+  text-align:center;
+  margin:0;
+}
+
+/* タイトル */
+h1{
+  font-size:40px;
+  margin-top:40px;
+  text-shadow:0 0 10px #0ff,0 0 20px #0ff;
+}
+
+/* ボタン共通 */
+button, select{
+  background:#000;
+  border:2px solid #0ff;
+  color:#0ff;
+  padding:15px;
+  margin:10px;
+  font-size:18px;
+  border-radius:10px;
+  box-shadow:0 0 10px #0ff;
+}
+
+/* 大ボタン */
+.big{
+  width:200px;
+  height:120px;
+  font-size:24px;
+}
+
+/* 結果表示 */
+.result{
+  margin-top:30px;
+}
+
+.label{
+  color:#f0f;
+  font-size:14px;
+}
+
+.value{
+  font-size:22px;
+  text-shadow:0 0 10px #0ff;
+  margin-bottom:10px;
+}
+
+/* 画面切替 */
+.screen{
+  display:none;
+}
+.active{
+  display:block;
+}
+
+/* 履歴カード */
+.card{
+  border:2px solid #0ff;
+  margin:15px;
+  padding:15px;
+  border-radius:10px;
+  box-shadow:0 0 10px #0ff;
+  text-align:left;
+}
+</style>
+</head>
+
+<body>
+
+<!-- ===== 生成画面 ===== -->
+<div id="generateScreen" class="screen active">
+
+<h1 id="title">City Generator</h1>
+
+<button class="big" onclick="generate()">Generate</button>
+
+<br>
+
+<select id="modeSelect" onchange="changeMode()">
+<option>Cyberpunk</option>
+<option>Apocalypse</option>
+<option>Synthwave</option>
+<option>Dreamcore</option>
+</select>
+
+<button onclick="showHistory()">History</button>
+
+<div class="result" id="resultArea"></div>
+
+</div>
+
+
+<!-- ===== 履歴画面 ===== -->
+<div id="historyScreen" class="screen">
+
+<button onclick="back()">戻る</button>
+<h2>生成履歴</h2>
+
+<div id="historyList"></div>
+
+</div>
+
+
+<script>
+
+// ===== データ =====
+const data = {
+  建築:["全周スクリーン塔","工業コンプレックス","都市内ドーム構造"],
+  環境:["照明の色変化","ネオンの夜","過剰な光量"],
+  社会:["広告洗脳社会","AI自治体","情報検閲社会"],
+  雰囲気:["迷路都市","不安定な秩序","電光舞う"],
+  地区:["都市制御補助区","浮遊商業区","量子演算区"],
+  施設:["企業監視センター","ドローン修理工房","電脳訓練施設"],
+  職業:["情報屋","ドローン整備士","人格再構築士"],
+  事件:["AI同士の衝突","銀行ハック","仮想世界崩壊"],
+  人物:["情報商人","市場の商人","記録を探す人"]
+};
+
+// 履歴
+let history = [];
+
+// ===== ランダム生成 =====
+function random(arr){
+  return arr[Math.floor(Math.random()*arr.length)];
+}
+
+function generate(){
+
+  const result = {};
+
+  for(let key in data){
+    result[key] = random(data[key]);
+  }
+
+  // 表示
+  const area = document.getElementById("resultArea");
+  area.innerHTML = "";
+
+  for(let key in result){
+    area.innerHTML += `
+      <div class="label">${key}</div>
+      <div class="value">${result[key]}</div>
+    `;
+  }
+
+  // 履歴保存
+  result.time = new Date().toLocaleString();
+  history.unshift(result);
+
+}
+
+
+// ===== モード変更 =====
+function changeMode(){
+
+  const mode = document.getElementById("modeSelect").value;
+
+  let color = "#0ff";
+
+  if(mode==="Apocalypse") color="#fff";
+  if(mode==="Synthwave") color="#f0f";
+  if(mode==="Dreamcore") color="#ccc";
+
+  document.querySelectorAll("button,select").forEach(el=>{
+    el.style.borderColor = color;
+    el.style.color = color;
+    el.style.boxShadow = `0 0 10px ${color}`;
+  });
+
+  document.getElementById("title").style.textShadow =
+    `0 0 10px ${color},0 0 20px ${color}`;
+}
+
+
+// ===== 履歴画面 =====
+function showHistory(){
+
+  document.getElementById("generateScreen").classList.remove("active");
+  document.getElementById("historyScreen").classList.add("active");
+
+  const list = document.getElementById("historyList");
+  list.innerHTML = "";
+
+  history.forEach(h=>{
+    let html = `<div class="card"><b>City</b><br>`;
+    for(let key in data){
+      html += `${key}: ${h[key]}<br>`;
+    }
+    html += `<small>${h.time}</small></div>`;
+    list.innerHTML += html;
+  });
+
+}
+
+function back(){
+  document.getElementById("generateScreen").classList.add("active");
+  document.getElementById("historyScreen").classList.remove("active");
+}
+
+</script>
+
+</body>
+</html>
