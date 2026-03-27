@@ -6,9 +6,9 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=10">
-<link rel="icon" href="IMG_6157.png?v=10" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=10">
+<link rel="manifest" href="manifest.json?v=11">
+<link rel="icon" href="IMG_6157.png?v=11" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=11">
 
 <style>
 :root{
@@ -126,16 +126,16 @@ button{
 #output{ margin-top:24px; }
 
 #output .group{
-    margin-bottom:14px; /* 少し余白を大きく */
+    margin-bottom:14px;
 }
 
 #output .label{
     color:var(--accent);
-    font-size:16px; /* 大きめ */
+    font-size:14px; /* 少し小さく */
 }
 
 #output .value{
-    font-size:18px; /* 大きめ */
+    font-size:16px; /* 少し小さく */
     color:var(--main);
 }
 
@@ -160,7 +160,7 @@ button{
 .card{
     position:relative;
     border:1px solid;
-    margin-bottom:16px; /* 項目間の余白を少し広げる */
+    margin-bottom:16px;
     padding:8px;
     text-align:left;
     box-shadow:0 0 8px var(--main);
@@ -171,7 +171,7 @@ button{
     position:absolute;
     top:6px;
     right:8px;
-    font-size:26px;
+    font-size:30px; /* 大きく */
     cursor:pointer;
 }
 
@@ -185,26 +185,25 @@ button{
 .cardContent{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:10px; /* カラム間の余白 */
+    gap:10px;
 }
 
-/* 履歴カードの項目内余白 */
 .cardContent > div > .group{
     margin-bottom:10px;
 }
 
 /* 履歴カード文字色をモードごとに分離 */
-.card.cyberpunk .label{ color:#FF00FF; }
-.card.cyberpunk .value{ color:#00FFFF; }
+.card.cyberpunk .label{ color:#FF00FF; font-size:16px; } /* 見出し2px大きく */
+.card.cyberpunk .value{ color:#00FFFF; font-size:15px; } /* 内容3px大きく */
 
-.card.apocalypse .label{ color:#228B22; }
-.card.apocalypse .value{ color:#FAFAD2; }
+.card.apocalypse .label{ color:#228B22; font-size:16px; }
+.card.apocalypse .value{ color:#FAFAD2; font-size:15px; }
 
-.card.synthwave .label{ color:#1E90FF; }
-.card.synthwave .value{ color:#FF00FF; }
+.card.synthwave .label{ color:#1E90FF; font-size:16px; }
+.card.synthwave .value{ color:#FF00FF; font-size:15px; }
 
-.card.dreamcore .label{ color:#ff99ff; }
-.card.dreamcore .value{ color:#99ffcc; }
+.card.dreamcore .label{ color:#ff99ff; font-size:16px; }
+.card.dreamcore .value{ color:#99ffcc; font-size:15px; }
 
 </style>
 </head>
@@ -355,7 +354,6 @@ function back(){
     mainScreen.style.display="block";
 }
 
-/* カスタムドロップダウン */
 const toggle=document.getElementById("modeToggle");
 const menu=document.getElementById("modeMenu");
 toggle.onclick=()=>{ menu.style.display = menu.style.display==="flex" ? "none" : "flex"; }
@@ -368,7 +366,6 @@ menu.querySelectorAll("div").forEach(el=>{
     }
 });
 
-/* イベント設定 */
 generateBtn.onclick=generate;
 historyBtn.onclick=showHistory;
 backBtn.onclick=back;
