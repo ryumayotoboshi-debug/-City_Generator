@@ -6,9 +6,9 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=14">
-<link rel="icon" href="IMG_6157.png?v=14" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=14">
+<link rel="manifest" href="manifest.json?v=15">
+<link rel="icon" href="IMG_6157.png?v=15" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=15">
 
 <style>
 :root{
@@ -135,7 +135,7 @@ button{
 }
 
 #output .value{
-    font-size:15px;
+    font-size:16px; /* 少し大きめ */
     color:var(--main);
 }
 
@@ -172,12 +172,12 @@ button{
     position:absolute;
     top:6px;
     right:8px;
-    font-size:38px; /* ⭐︎さらに大きく */
+    font-size:40px; /* ⭐︎さらに大きく */
     cursor:pointer;
 }
 
 .cardTime{
-    font-size:10px;
+    font-size:12px; /* 少し大きく */
     position:absolute;
     right:6px;
     bottom:4px;
@@ -190,10 +190,10 @@ button{
 }
 
 .cardContent > div > .group{
-    margin-bottom:10px;
+    margin-bottom:12px;
 }
 
-/* 履歴カード文字色をモードごとに分離 & フォントサイズ調整 */
+/* 履歴カード文字色をモードごとに分離 */
 .card.cyberpunk .label{ color:#FF00FF; font-size:16px; }
 .card.cyberpunk .value{ color:#00FFFF; font-size:15px; }
 
@@ -375,8 +375,7 @@ favHistoryBtn.onclick=toggleHistoryMode;
 
 /* 履歴画面タップで最上部にスクロール */
 historyScreen.addEventListener("click",(e)=>{
-    // 画面上部をタップした場合のみ
-    if(e.target===historyScreen){
+    if(e.clientY <= 50){ // 画面上部50px以内なら
         historyScreen.scrollTop=0;
     }
 });
