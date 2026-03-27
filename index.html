@@ -16,12 +16,11 @@
     --value-color:#00ffcc;
 }
 
-body.cyberpunk{ --main:#00ffcc; --accent:#ff2bd6; --bg:black; --label-color:#ff2bd6; --value-color:#00ffcc; }
-body.apocalypse{ --main:#ff4444; --accent:#ffaa00; --bg:#1a0000; --label-color:#ffaa00; --value-color:#ff7777; }
-body.synthwave{ --main:#ff66cc; --accent:#66ccff; --bg:#14001a; --label-color:#66ccff; --value-color:#ff99dd; }
-body.dreamcore{ --main:#99ffcc; --accent:#ff99ff; --bg:#001a1a; --label-color:#ff99ff; --value-color:#ccffee; }
+body.cyberpunk{ --main:#00ffcc; --accent:#ff2bd6; --bg:black; }
+body.apocalypse{ --main:#ff4444; --accent:#ffaa00; --bg:#1a0000; }
+body.synthwave{ --main:#ff66cc; --accent:#66ccff; --bg:#14001a; }
+body.dreamcore{ --main:#99ffcc; --accent:#ff99ff; --bg:#001a1a; }
 
-/* ===== 基本 ===== */
 body{
     margin:0;
     background:var(--bg);
@@ -31,23 +30,17 @@ body{
     text-align:center;
 }
 
-#mainScreen{
-    padding-top:40px;
-}
+#mainScreen{ padding-top:40px; }
 
-/* ★タイトル拡大 */
+/* ★タイトル拡大＋余白 */
 .title{
-    font-size:34px;
+    font-size:38px;
     font-weight:900;
     margin-top:24px;
-    margin-bottom:16px;
+    margin-bottom:26px;
     text-shadow:0 0 10px var(--main);
 }
 
-.screen{ display:none; }
-.active{ display:block; }
-
-/* ===== コントロール ===== */
 .controls{
     display:grid;
     grid-template-columns: 1fr 1fr;
@@ -61,18 +54,13 @@ button, select{
     color:var(--main);
     border:1px solid var(--main);
     font-size:12px;
-    text-align:center;
-    text-align-last:center;
     box-shadow:0 0 5px var(--main);
 }
 
-/* ★Generateだけ拡大 */
 #generateBtn{
     grid-row:1 / span 2;
     font-size:16px;
 }
-
-#modeSelect{ width:100%; }
 
 .bottomRight{
     display:grid;
@@ -80,30 +68,11 @@ button, select{
     gap:6px;
 }
 
-/* 出力 */
-#output{
-    margin-top:6px;
-    font-size:16px;
-    line-height:1.6;
-}
+/* ===== 出力 ===== */
+#output{ margin-top:6px; }
 
-.block{ margin-bottom:6px; }
-
-.block:first-child .label{
-    padding-top:36px;
-}
-
-.label{
-    color:var(--label-color);
-    font-size:12px;
-    text-shadow:0 0 6px var(--label-color);
-    margin-bottom:1px;
-}
-
-.value{
-    color:var(--value-color);
-    font-size:14px;
-}
+.label{ color:var(--accent); font-size:12px; }
+.value{ font-size:14px; }
 
 /* ===== 履歴 ===== */
 #historyScreen{
@@ -112,59 +81,38 @@ button, select{
     overflow-y:auto;
 }
 
-#backBtn{
+/* ★ボタン大型化 */
+#backBtn, #favHistoryBtn{
     position:absolute;
     top:10px;
-    left:10px;
+    padding:6px 12px;
+    font-size:14px;
 }
 
-#favHistoryBtn{
-    position:absolute;
-    top:10px;
-    right:10px;
-}
+#backBtn{ left:10px; }
+#favHistoryBtn{ right:10px; }
 
 .card{
     position:relative;
     border:1px solid;
     margin-bottom:12px;
     padding:10px;
-    font-size:13px;
     text-align:left;
 }
 
-/* ★カード内トグル */
+/* ★星サイズUP */
 .cardFav{
     position:absolute;
     top:6px;
     right:8px;
+    font-size:20px;
     cursor:pointer;
-}
-
-.card.cyberpunk{ border-color:#00ffcc; color:#00ffcc; }
-.card.apocalypse{ border-color:#ff4444; color:#ff4444; }
-.card.synthwave{ border-color:#ff66cc; color:#ff66cc; }
-.card.dreamcore{ border-color:#99ffcc; color:#99ffcc; }
-
-.card.cyberpunk .label{ color:#ff2bd6; }
-.card.apocalypse .label{ color:#ffaa00; }
-.card.synthwave .label{ color:#66ccff; }
-.card.dreamcore .label{ color:#ff99ff; }
-
-.time{
-    font-size:10px;
-    margin-bottom:6px;
-    color:#888;
 }
 
 .cardContent{
     display:grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns:1fr 1fr;
     gap:8px;
-}
-
-.cardContent div{
-    margin-bottom:6px;
 }
 
 </style>
@@ -172,167 +120,157 @@ button, select{
 
 <body class="cyberpunk">
 
-<div id="mainScreen" class="screen active">
-
+<div id="mainScreen" class="active">
 <div class="title">City Generator</div>
 
 <div class="controls">
-    <button id="generateBtn">Generate</button>
+<button id="generateBtn">Generate</button>
 
-    <select id="modeSelect">
-        <option value="cyberpunk">Cyberpunk</option>
-        <option value="apocalypse">Apocalypse</option>
-        <option value="synthwave">Synthwave</option>
-        <option value="dreamcore">DreamCore</option>
-    </select>
+<select id="modeSelect">
+<option value="cyberpunk">Cyberpunk</option>
+<option value="apocalypse">Apocalypse</option>
+<option value="synthwave">Synthwave</option>
+<option value="dreamcore">DreamCore</option>
+</select>
 
-    <div class="bottomRight">
-        <button id="historyBtn">History</button>
-        <button id="favBtn">☆</button>
-    </div>
+<div class="bottomRight">
+<button id="historyBtn">History</button>
+<button id="favBtn">☆</button>
+</div>
 </div>
 
 <div id="output"></div>
-
 </div>
 
 <div id="historyScreen" class="screen">
-    <button id="backBtn">戻る</button>
-    <button id="favHistoryBtn">お気に入り</button>
-    <h2 id="historyTitle">History</h2>
-    <div id="historyList"></div>
+<button id="backBtn">戻る</button>
+<button id="favHistoryBtn">お気に入り</button>
+<h2 id="historyTitle">History</h2>
+<div id="historyList"></div>
 </div>
 
 <script src="data.js"></script>
 
 <script>
-let currentMode = "cyberpunk";
-let historyData = JSON.parse(localStorage.getItem("historyData")||"[]");
-let favoritesData = JSON.parse(localStorage.getItem("favoritesData")||"[]");
-let lastGenerated = null;
+let currentMode="cyberpunk";
+let historyData=JSON.parse(localStorage.getItem("historyData")||"[]");
+let favoritesData=JSON.parse(localStorage.getItem("favoritesData")||"[]");
+let lastGenerated=null;
+let showingFavorites=false;
 
 function save(){
-    localStorage.setItem("historyData",JSON.stringify(historyData));
-    localStorage.setItem("favoritesData",JSON.stringify(favoritesData));
-}
-
-function pick(arr){
-    return arr[Math.floor(Math.random()*arr.length)];
+localStorage.setItem("historyData",JSON.stringify(historyData));
+localStorage.setItem("favoritesData",JSON.stringify(favoritesData));
 }
 
 function isSame(a,b){
-    return JSON.stringify(a) === JSON.stringify(b);
+return JSON.stringify(a)===JSON.stringify(b);
 }
 
 function generate(){
-    const d = data[currentMode];
+const d=data[currentMode];
 
-    const result = {
-        建築: pick(d.architecture),
-        環境: pick(d.environment),
-        社会: pick(d.society),
-        雰囲気: pick(d.mood),
-        地区: pick(d.district),
-        施設: pick(d.facility),
-        職業: pick(d.jobs),
-        事件: pick(d.incidents),
-        主要人物: pick(d.characters),
-        mode: currentMode,
-        time: new Date().toLocaleString()
-    };
+const result={
+建築:d.architecture[Math.random()*d.architecture.length|0],
+環境:d.environment[Math.random()*d.environment.length|0],
+社会:d.society[Math.random()*d.society.length|0],
+雰囲気:d.mood[Math.random()*d.mood.length|0],
+地区:d.district[Math.random()*d.district.length|0],
+施設:d.facility[Math.random()*d.facility.length|0],
+職業:d.jobs[Math.random()*d.jobs.length|0],
+事件:d.incidents[Math.random()*d.incidents.length|0],
+主要人物:d.characters[Math.random()*d.characters.length|0],
+mode:currentMode,
+time:new Date().toLocaleString()
+};
 
-    lastGenerated = result;
-    historyData.unshift(result);
-    save();
+lastGenerated=result;
+historyData.unshift(result);
+save();
 
-    favBtn.innerText = "☆";
+/* ★状態同期 */
+favBtn.innerText = favoritesData.some(f=>isSame(f,result)) ? "★" : "☆";
 
-    let html = "";
-    for(let key in result){
-        if(key === "time" || key === "mode") continue;
-        html += `
-        <div class="block">
-            <div class="label">${key}</div>
-            <div class="value">${result[key]}</div>
-        </div>`;
-    }
-
-    output.innerHTML = html;
+let html="";
+for(let k in result){
+if(k==="mode"||k==="time")continue;
+html+=`<div><div class="label">${k}</div><div class="value">${result[k]}</div></div>`;
+}
+output.innerHTML=html;
 }
 
-function toggleFavorite(target){
-    const index = favoritesData.findIndex(f=>isSame(f,target));
+function toggleFavoriteByIndex(index, list){
+const item=list[index];
+const i=favoritesData.findIndex(f=>isSame(f,item));
 
-    if(index >= 0){
-        favoritesData.splice(index,1);
-    }else{
-        favoritesData.unshift(target);
-    }
-    save();
-    renderList(historyTitle.innerText==="Favorites"?favoritesData:historyData);
+if(i>=0){ favoritesData.splice(i,1); }
+else{ favoritesData.unshift(item); }
+
+save();
+renderList(showingFavorites?favoritesData:historyData);
 }
 
-function changeMode(){
-    currentMode = modeSelect.value;
-    document.body.className = currentMode;
+function toggleFavoriteMain(){
+if(!lastGenerated)return;
+toggleFavoriteByIndex(0,[lastGenerated]);
+favBtn.innerText = favoritesData.some(f=>isSame(f,lastGenerated)) ? "★":"☆";
 }
 
 function renderList(data){
-    let html = "";
-    data.forEach(item=>{
-        const isFav = favoritesData.some(f=>isSame(f,item));
+let html="";
+data.forEach((item,i)=>{
+const isFav=favoritesData.some(f=>isSame(f,item));
 
-        html += `<div class="card ${item.mode}">
-        <div class="cardFav" onclick='toggleFavorite(${JSON.stringify(item)})'>
-        ${isFav?"★":"☆"}
-        </div>
+html+=`
+<div class="card ${item.mode}">
+<div class="cardFav" onclick="toggleFavoriteByIndex(${i},${showingFavorites?'favoritesData':'historyData'})">
+${isFav?"★":"☆"}
+</div>
 
-        <div class="time">${item.time}</div>
+<div>${item.time}</div>
 
-        <div class="cardContent">
-        <div>
-        <div class="label">建築</div><div>${item.建築}</div>
-        <div class="label">環境</div><div>${item.環境}</div>
-        <div class="label">社会</div><div>${item.社会}</div>
-        <div class="label">雰囲気</div><div>${item.雰囲気}</div>
-        <div class="label">地区</div><div>${item.地区}</div>
-        </div>
-
-        <div>
-        <div class="label">施設</div><div>${item.施設}</div>
-        <div class="label">職業</div><div>${item.職業}</div>
-        <div class="label">事件</div><div>${item.事件}</div>
-        <div class="label">主要人物</div><div>${item.主要人物}</div>
-        </div>
-        </div>
-        </div>`;
-    });
-    historyList.innerHTML = html;
+<div class="cardContent">
+<div>
+<div class="label">建築</div><div>${item.建築}</div>
+<div class="label">環境</div><div>${item.環境}</div>
+<div class="label">社会</div><div>${item.社会}</div>
+</div>
+<div>
+<div class="label">施設</div><div>${item.施設}</div>
+<div class="label">事件</div><div>${item.事件}</div>
+<div class="label">主要人物</div><div>${item.主要人物}</div>
+</div>
+</div>
+</div>`;
+});
+historyList.innerHTML=html;
 }
 
 function showHistory(){
-    mainScreen.classList.remove("active");
-    historyScreen.classList.add("active");
-    historyTitle.innerText = "History";
-    renderList(historyData);
+mainScreen.style.display="none";
+historyScreen.style.display="block";
+showingFavorites=false;
+historyTitle.innerText="History";
+renderList(historyData);
 }
 
-function showFavorites(){
-    historyTitle.innerText = "Favorites";
-    renderList(favoritesData);
+function toggleHistoryMode(){
+showingFavorites=!showingFavorites;
+historyTitle.innerText=showingFavorites?"Favorites":"History";
+renderList(showingFavorites?favoritesData:historyData);
 }
 
 function back(){
-    historyScreen.classList.remove("active");
-    mainScreen.classList.add("active");
+historyScreen.style.display="none";
+mainScreen.style.display="block";
 }
 
-generateBtn.onclick = generate;
-modeSelect.onchange = changeMode;
-historyBtn.onclick = showHistory;
-backBtn.onclick = back;
-favBtn.onclick = ()=>toggleFavorite(lastGenerated);
-favHistoryBtn.onclick = showFavorites;
+generateBtn.onclick=generate;
+modeSelect.onchange=()=>{currentMode=modeSelect.value;document.body.className=currentMode;};
+historyBtn.onclick=showHistory;
+backBtn.onclick=back;
+favBtn.onclick=toggleFavoriteMain;
+favHistoryBtn.onclick=toggleHistoryMode;
 
 </script>
 
