@@ -16,37 +16,10 @@
     --value-color:#00ffcc;
 }
 
-body.cyberpunk{
-    --main:#00ffcc;
-    --accent:#ff2bd6;
-    --bg:black;
-    --label-color:#ff2bd6;
-    --value-color:#00ffcc;
-}
-
-body.apocalypse{
-    --main:#ff4444;
-    --accent:#ffaa00;
-    --bg:#1a0000;
-    --label-color:#ffaa00;
-    --value-color:#ff7777;
-}
-
-body.synthwave{
-    --main:#ff66cc;
-    --accent:#66ccff;
-    --bg:#14001a;
-    --label-color:#66ccff;
-    --value-color:#ff99dd;
-}
-
-body.dreamcore{
-    --main:#99ffcc;
-    --accent:#ff99ff;
-    --bg:#001a1a;
-    --label-color:#ff99ff;
-    --value-color:#ccffee;
-}
+body.cyberpunk{ --main:#00ffcc; --accent:#ff2bd6; --bg:black; --label-color:#ff2bd6; --value-color:#00ffcc; }
+body.apocalypse{ --main:#ff4444; --accent:#ffaa00; --bg:#1a0000; --label-color:#ffaa00; --value-color:#ff7777; }
+body.synthwave{ --main:#ff66cc; --accent:#66ccff; --bg:#14001a; --label-color:#66ccff; --value-color:#ff99dd; }
+body.dreamcore{ --main:#99ffcc; --accent:#ff99ff; --bg:#001a1a; --label-color:#ff99ff; --value-color:#ccffee; }
 
 /* ===== 基本 ===== */
 body{
@@ -58,7 +31,7 @@ body{
     text-align:center;
 }
 
-/* タイトル（太く） */
+/* タイトル */
 .title{
     font-size:30px;
     font-weight:900;
@@ -90,13 +63,8 @@ button, select{
     box-shadow:0 0 5px var(--main);
 }
 
-#generateBtn{
-    grid-row:1 / span 2;
-}
-
-#modeSelect{
-    width:100%;
-}
+#generateBtn{ grid-row:1 / span 2; }
+#modeSelect{ width:100%; }
 
 .bottomRight{
     display:grid;
@@ -113,7 +81,6 @@ button, select{
 
 .block{ margin-bottom:6px; }
 
-/* ★余白さらに拡張 */
 .block:first-child .label{
     padding-top:36px;
 }
@@ -133,6 +100,8 @@ button, select{
 /* ===== 履歴 ===== */
 #historyScreen{
     padding:10px;
+    height:100vh;
+    overflow-y:auto; /* ★スクロール */
 }
 
 #backBtn{
@@ -156,13 +125,13 @@ button, select{
     text-align:left;
 }
 
-/* モード別カード色 */
+/* モード別 */
 .card.cyberpunk{ border-color:#00ffcc; color:#00ffcc; }
 .card.apocalypse{ border-color:#ff4444; color:#ff4444; }
 .card.synthwave{ border-color:#ff66cc; color:#ff66cc; }
 .card.dreamcore{ border-color:#99ffcc; color:#99ffcc; }
 
-/* ★履歴見出しカラー同期 */
+/* 見出し色同期 */
 .card.cyberpunk .label{ color:#ff2bd6; }
 .card.apocalypse .label{ color:#ffaa00; }
 .card.synthwave .label{ color:#66ccff; }
@@ -179,10 +148,6 @@ button, select{
     display:grid;
     grid-template-columns: 1fr 1fr;
     gap:8px;
-}
-
-.cardContent .label{
-    margin-bottom:0px;
 }
 
 .cardContent div{
@@ -222,7 +187,7 @@ button, select{
 <div id="historyScreen" class="screen">
     <button id="backBtn">戻る</button>
     <button id="favHistoryBtn">⭐ お気に入り</button>
-    <h2>History</h2>
+    <h2 id="historyTitle">History</h2>
     <div id="historyList"></div>
 </div>
 
@@ -231,6 +196,8 @@ button, select{
 <script>
 let currentMode = "cyberpunk";
 let historyData = [];
+let favoritesData = [];
+let lastGenerated = null;
 
 function pick(arr){
     return arr[Math.floor(Math.random()*arr.length)];
@@ -253,6 +220,7 @@ function generate(){
         time: new Date().toLocaleString()
     };
 
+    lastGenerated = result;
     historyData.unshift(result);
 
     let html = "";
@@ -269,23 +237,17 @@ function generate(){
 }
 
 function changeMode(){
-    const select = document.getElementById("modeSelect");
-    currentMode = select.value;
+    currentMode = modeSelect.value;
     document.body.className = currentMode;
 }
 
-function showHistory(){
-    document.getElementById("mainScreen").classList.remove("active");
-    document.getElementById("historyScreen").classList.add("active");
-
+function renderList(data){
     let html = "";
-
-    historyData.forEach(item=>{
+    data.forEach(item=>{
         html += `<div class="card ${item.mode}">
         <div class="time">${item.time}</div>
 
         <div class="cardContent">
-
         <div>
         <div class="label">建築</div><div>${item.建築}</div>
         <div class="label">環境</div><div>${item.環境}</div>
@@ -300,25 +262,42 @@ function showHistory(){
         <div class="label">事件</div><div>${item.事件}</div>
         <div class="label">主要人物</div><div>${item.主要人物}</div>
         </div>
-
         </div>
         </div>`;
     });
+    historyList.innerHTML = html;
+}
 
-    document.getElementById("historyList").innerHTML = html;
+function showHistory(){
+    mainScreen.classList.remove("active");
+    historyScreen.classList.add("active");
+    historyTitle.innerText = "History";
+    renderList(historyData);
+}
+
+function showFavorites(){
+    historyTitle.innerText = "Favorites";
+    renderList(favoritesData);
 }
 
 function back(){
-    document.getElementById("historyScreen").classList.remove("active");
-    document.getElementById("mainScreen").classList.add("active");
+    historyScreen.classList.remove("active");
+    mainScreen.classList.add("active");
 }
 
 generateBtn.onclick = generate;
 modeSelect.onchange = changeMode;
 historyBtn.onclick = showHistory;
 backBtn.onclick = back;
-favBtn.onclick = ()=>alert("お気に入り未実装");
-favHistoryBtn.onclick = ()=>alert("お気に入り一覧未実装");
+
+favBtn.onclick = ()=>{
+    if(lastGenerated){
+        favoritesData.unshift(lastGenerated);
+        alert("お気に入りに追加しました");
+    }
+};
+
+favHistoryBtn.onclick = showFavorites;
 
 </script>
 
