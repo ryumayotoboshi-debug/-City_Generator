@@ -32,7 +32,7 @@ body{
 
 #mainScreen{ padding-top:40px; }
 
-/* ★タイトル拡大＋余白 */
+/* ★タイトル */
 .title{
     font-size:38px;
     font-weight:900;
@@ -49,12 +49,14 @@ body{
     padding:6px 20px;
 }
 
+/* ★中央寄せ */
 button, select{
     background:black;
     color:var(--main);
     border:1px solid var(--main);
     font-size:12px;
     box-shadow:0 0 5px var(--main);
+    text-align:center; /* ★追加 */
 }
 
 #generateBtn{
@@ -69,20 +71,32 @@ button, select{
 }
 
 /* ===== 出力 ===== */
-#output{ margin-top:6px; }
+/* ★余白拡張（建築との距離） */
+#output{ margin-top:24px; }
 
-.label{ color:var(--accent); font-size:12px; }
-.value{ font-size:14px; }
+/* ★グループ化 */
+.group{
+    margin-bottom:16px; /* ★グループ間余白 */
+}
+
+.label{
+    color:var(--accent);
+    font-size:12px;
+}
+
+/* ★文字サイズUP */
+.value{
+    font-size:16px;
+}
 
 /* ===== 履歴 ===== */
 #historyScreen{
     padding:10px;
     height:100vh;
     overflow-y:auto;
-    display:none; /* ★追加：これだけ */
+    display:none;
 }
 
-/* ★ボタン大型化 */
 #backBtn, #favHistoryBtn{
     position:absolute;
     top:10px;
@@ -101,7 +115,6 @@ button, select{
     text-align:left;
 }
 
-/* ★星サイズUP */
 .cardFav{
     position:absolute;
     top:6px;
@@ -121,7 +134,7 @@ button, select{
 
 <body class="cyberpunk">
 
-<div id="mainScreen" class="active">
+<div id="mainScreen">
 <div class="title">City Generator</div>
 
 <div class="controls">
@@ -143,7 +156,7 @@ button, select{
 <div id="output"></div>
 </div>
 
-<div id="historyScreen" class="screen">
+<div id="historyScreen">
 <button id="backBtn">戻る</button>
 <button id="favHistoryBtn">お気に入り</button>
 <h2 id="historyTitle">History</h2>
@@ -189,14 +202,20 @@ lastGenerated=result;
 historyData.unshift(result);
 save();
 
-/* ★状態同期 */
 favBtn.innerText = favoritesData.some(f=>isSame(f,result)) ? "★" : "☆";
 
 let html="";
 for(let k in result){
 if(k==="mode"||k==="time")continue;
-html+=`<div><div class="label">${k}</div><div class="value">${result[k]}</div></div>`;
+
+/* ★グループ化（最小変更） */
+html+=`
+<div class="group">
+<div class="label">${k}</div>
+<div class="value">${result[k]}</div>
+</div>`;
 }
+
 output.innerHTML=html;
 }
 
