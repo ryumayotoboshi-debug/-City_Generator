@@ -31,14 +31,13 @@ body{
     text-align:center;
 }
 
-/* ★全体を下に移動 */
 #mainScreen{
     padding-top:40px;
 }
 
-/* タイトル */
+/* ★タイトル拡大 */
 .title{
-    font-size:30px;
+    font-size:34px;
     font-weight:900;
     margin-top:24px;
     margin-bottom:16px;
@@ -54,7 +53,7 @@ body{
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 34px 34px;
     gap:6px;
-    padding:6px 24px; /* ★ここだけ変更 */
+    padding:6px 20px;
 }
 
 button, select{
@@ -67,7 +66,12 @@ button, select{
     box-shadow:0 0 5px var(--main);
 }
 
-#generateBtn{ grid-row:1 / span 2; }
+/* ★Generateだけ拡大 */
+#generateBtn{
+    grid-row:1 / span 2;
+    font-size:16px;
+}
+
 #modeSelect{ width:100%; }
 
 .bottomRight{
@@ -121,11 +125,20 @@ button, select{
 }
 
 .card{
+    position:relative;
     border:1px solid;
     margin-bottom:12px;
     padding:10px;
     font-size:13px;
     text-align:left;
+}
+
+/* ★カード内トグル */
+.cardFav{
+    position:absolute;
+    top:6px;
+    right:8px;
+    cursor:pointer;
 }
 
 .card.cyberpunk{ border-color:#00ffcc; color:#00ffcc; }
@@ -183,7 +196,6 @@ button, select{
 
 </div>
 
-<!-- 履歴 -->
 <div id="historyScreen" class="screen">
     <button id="backBtn">戻る</button>
     <button id="favHistoryBtn">⭐ お気に入り</button>
@@ -195,9 +207,14 @@ button, select{
 
 <script>
 let currentMode = "cyberpunk";
-let historyData = [];
-let favoritesData = [];
+let historyData = JSON.parse(localStorage.getItem("historyData")||"[]");
+let favoritesData = JSON.parse(localStorage.getItem("favoritesData")||"[]");
 let lastGenerated = null;
+
+function save(){
+    localStorage.setItem("historyData",JSON.stringify(historyData));
+    localStorage.setItem("favoritesData",JSON.stringify(favoritesData));
+}
 
 function pick(arr){
     return arr[Math.floor(Math.random()*arr.length)];
@@ -226,8 +243,9 @@ function generate(){
 
     lastGenerated = result;
     historyData.unshift(result);
+    save();
 
-    document.getElementById("favBtn").innerText = "☆";
+    favBtn.innerText = "☆";
 
     let html = "";
     for(let key in result){
@@ -242,18 +260,16 @@ function generate(){
     output.innerHTML = html;
 }
 
-function toggleFavorite(){
-    if(!lastGenerated) return;
-
-    const index = favoritesData.findIndex(f=>isSame(f,lastGenerated));
+function toggleFavorite(target){
+    const index = favoritesData.findIndex(f=>isSame(f,target));
 
     if(index >= 0){
         favoritesData.splice(index,1);
-        favBtn.innerText = "☆";
     }else{
-        favoritesData.unshift(lastGenerated);
-        favBtn.innerText = "★";
+        favoritesData.unshift(target);
     }
+    save();
+    renderList(historyTitle.innerText==="Favorites"?favoritesData:historyData);
 }
 
 function changeMode(){
@@ -264,7 +280,13 @@ function changeMode(){
 function renderList(data){
     let html = "";
     data.forEach(item=>{
+        const isFav = favoritesData.some(f=>isSame(f,item));
+
         html += `<div class="card ${item.mode}">
+        <div class="cardFav" onclick='toggleFavorite(${JSON.stringify(item)})'>
+        ${isFav?"★":"☆"}
+        </div>
+
         <div class="time">${item.time}</div>
 
         <div class="cardContent">
@@ -309,7 +331,7 @@ generateBtn.onclick = generate;
 modeSelect.onchange = changeMode;
 historyBtn.onclick = showHistory;
 backBtn.onclick = back;
-favBtn.onclick = toggleFavorite;
+favBtn.onclick = ()=>toggleFavorite(lastGenerated);
 favHistoryBtn.onclick = showFavorites;
 
 </script>
