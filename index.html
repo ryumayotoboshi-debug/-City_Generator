@@ -6,9 +6,9 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=9">
-<link rel="icon" href="IMG_6157.png?v=9" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=9">
+<link rel="manifest" href="manifest.json?v=10">
+<link rel="icon" href="IMG_6157.png?v=10" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=10">
 
 <style>
 :root{
@@ -34,7 +34,7 @@ body{
 #mainScreen{ padding-top:18px; }
 
 .title{
-    font-size:30px;
+    font-size:32px;
     font-weight:900;
     margin-top:12px;
     margin-bottom:20px;
@@ -122,22 +122,24 @@ button{
     color: var(--bg);
 }
 
-/* 出力 */
+/* ===== 生成画面出力 ===== */
 #output{ margin-top:24px; }
 
-.group{ margin-bottom:10px; }
-
-.label{
-    color:var(--accent);
-    font-size:10px; /* 小さく */
+#output .group{
+    margin-bottom:14px; /* 少し余白を大きく */
 }
 
-.value{
-    font-size:12px; /* 少し小さく */
+#output .label{
+    color:var(--accent);
+    font-size:16px; /* 大きめ */
+}
+
+#output .value{
+    font-size:18px; /* 大きめ */
     color:var(--main);
 }
 
-/* 履歴画面 */
+/* ===== 履歴画面 ===== */
 #historyScreen{
     padding:10px;
     height:100vh;
@@ -158,7 +160,7 @@ button{
 .card{
     position:relative;
     border:1px solid;
-    margin-bottom:12px;
+    margin-bottom:16px; /* 項目間の余白を少し広げる */
     padding:8px;
     text-align:left;
     box-shadow:0 0 8px var(--main);
@@ -183,14 +185,27 @@ button{
 .cardContent{
     display:grid;
     grid-template-columns:1fr 1fr;
-    gap:6px;
+    gap:10px; /* カラム間の余白 */
 }
 
-/* 履歴カード文字色をモードに完全連動 */
-.card.cyberpunk .label, .card.cyberpunk .value{ color:#00FFFF; }
-.card.apocalypse .label, .card.apocalypse .value{ color:#FFD700; }
-.card.synthwave .label, .card.synthwave .value{ color:#FF00FF; }
-.card.dreamcore .label, .card.dreamcore .value{ color:#99FFCC; }
+/* 履歴カードの項目内余白 */
+.cardContent > div > .group{
+    margin-bottom:10px;
+}
+
+/* 履歴カード文字色をモードごとに分離 */
+.card.cyberpunk .label{ color:#FF00FF; }
+.card.cyberpunk .value{ color:#00FFFF; }
+
+.card.apocalypse .label{ color:#228B22; }
+.card.apocalypse .value{ color:#FAFAD2; }
+
+.card.synthwave .label{ color:#1E90FF; }
+.card.synthwave .value{ color:#FF00FF; }
+
+.card.dreamcore .label{ color:#ff99ff; }
+.card.dreamcore .value{ color:#99ffcc; }
+
 </style>
 </head>
 
@@ -302,17 +317,17 @@ function renderList(data){
         </div>
         <div class="cardContent">
         <div>
-        <div class="label">建築</div><div class="value">${item.建築}</div>
-        <div class="label">環境</div><div class="value">${item.環境}</div>
-        <div class="label">社会</div><div class="value">${item.社会}</div>
-        <div class="label">雰囲気</div><div class="value">${item.雰囲気}</div>
-        <div class="label">地区</div><div class="value">${item.地区}</div>
+        <div class="group"><div class="label">建築</div><div class="value">${item.建築}</div></div>
+        <div class="group"><div class="label">環境</div><div class="value">${item.環境}</div></div>
+        <div class="group"><div class="label">社会</div><div class="value">${item.社会}</div></div>
+        <div class="group"><div class="label">雰囲気</div><div class="value">${item.雰囲気}</div></div>
+        <div class="group"><div class="label">地区</div><div class="value">${item.地区}</div></div>
         </div>
         <div>
-        <div class="label">施設</div><div class="value">${item.施設}</div>
-        <div class="label">職業</div><div class="value">${item.職業}</div>
-        <div class="label">事件</div><div class="value">${item.事件}</div>
-        <div class="label">主要人物</div><div class="value">${item.主要人物}</div>
+        <div class="group"><div class="label">施設</div><div class="value">${item.施設}</div></div>
+        <div class="group"><div class="label">職業</div><div class="value">${item.職業}</div></div>
+        <div class="group"><div class="label">事件</div><div class="value">${item.事件}</div></div>
+        <div class="group"><div class="label">主要人物</div><div class="value">${item.主要人物}</div></div>
         </div>
         </div>
         <div class="cardTime">${item.time}</div>
@@ -361,6 +376,5 @@ favBtn.onclick=toggleFavoriteMain;
 favHistoryBtn.onclick=toggleHistoryMode;
 
 </script>
-
 </body>
 </html>
