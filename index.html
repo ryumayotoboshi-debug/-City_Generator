@@ -6,9 +6,9 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=8">
-<link rel="icon" href="IMG_6157.png?v=8" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=8">
+<link rel="manifest" href="manifest.json?v=9">
+<link rel="icon" href="IMG_6157.png?v=9" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=9">
 
 <style>
 :root{
@@ -34,7 +34,7 @@ body{
 #mainScreen{ padding-top:18px; }
 
 .title{
-    font-size:32px;
+    font-size:30px;
     font-weight:900;
     margin-top:12px;
     margin-bottom:20px;
@@ -129,11 +129,11 @@ button{
 
 .label{
     color:var(--accent);
-    font-size:12px;
+    font-size:10px; /* 小さく */
 }
 
 .value{
-    font-size:14px; /* 少し小さく */
+    font-size:12px; /* 少し小さく */
     color:var(--main);
 }
 
@@ -169,7 +169,7 @@ button{
     position:absolute;
     top:6px;
     right:8px;
-    font-size:26px; /* 大きめ */
+    font-size:26px;
     cursor:pointer;
 }
 
@@ -186,18 +186,11 @@ button{
     gap:6px;
 }
 
-/* 履歴カード文字色をモードに連動 */
-.card.cyberpunk .label{ color:#FF00FF; }
-.card.cyberpunk .value{ color:#00FFFF; }
-
-.card.apocalypse .label{ color:#FF4500; }
-.card.apocalypse .value{ color:#FFD700; }
-
-.card.synthwave .label{ color:#00FFFF; }
-.card.synthwave .value{ color:#FF00FF; }
-
-.card.dreamcore .label{ color:#FF99FF; }
-.card.dreamcore .value{ color:#99FFCC; }
+/* 履歴カード文字色をモードに完全連動 */
+.card.cyberpunk .label, .card.cyberpunk .value{ color:#00FFFF; }
+.card.apocalypse .label, .card.apocalypse .value{ color:#FFD700; }
+.card.synthwave .label, .card.synthwave .value{ color:#FF00FF; }
+.card.dreamcore .label, .card.dreamcore .value{ color:#99FFCC; }
 </style>
 </head>
 
@@ -263,7 +256,7 @@ function generate(){
         職業:d.jobs[Math.random()*d.jobs.length|0],
         事件:d.incidents[Math.random()*d.incidents.length|0],
         主要人物:d.characters[Math.random()*d.characters.length|0],
-        mode:currentMode,
+        mode:currentMode.toLowerCase(),
         time:new Date().toLocaleString()
     };
     lastGenerated=result;
@@ -353,7 +346,7 @@ const menu=document.getElementById("modeMenu");
 toggle.onclick=()=>{ menu.style.display = menu.style.display==="flex" ? "none" : "flex"; }
 menu.querySelectorAll("div").forEach(el=>{
     el.onclick=()=>{
-        currentMode=el.dataset.mode;
+        currentMode=el.dataset.mode.toLowerCase();
         document.body.className=currentMode;
         toggle.innerText=el.innerText;
         menu.style.display="none";
