@@ -6,12 +6,11 @@
 
 <title>Re：City Generator</title>
 
-<link rel="manifest" href="manifest.json?v=6">
-<link rel="icon" href="IMG_6157.png?v=6" type="image/png">
-<link rel="apple-touch-icon" href="IMG_6157.png?v=6">
+<link rel="manifest" href="manifest.json?v=7">
+<link rel="icon" href="IMG_6157.png?v=7" type="image/png">
+<link rel="apple-touch-icon" href="IMG_6157.png?v=7">
 
 <style>
-/* ===== モードカラー ===== */
 :root{
     --main:#00ffcc;
     --accent:#ff2bd6;
@@ -32,7 +31,7 @@ body{
     text-align:center;
 }
 
-#mainScreen{ padding-top:18px; } /* 上に配置 */
+#mainScreen{ padding-top:18px; }
 
 .title{
     font-size:38px;
@@ -69,7 +68,6 @@ button{
     gap:6px;
 }
 
-/* ===== カスタムプルダウン ===== */
 .dropdown{
     position: relative;
     display: inline-block;
@@ -123,7 +121,7 @@ button{
     color: var(--bg);
 }
 
-/* ===== 出力 ===== */
+/* ===== 生成画面出力 ===== */
 #output{ 
     margin-top:24px;
 }
@@ -132,11 +130,11 @@ button{
 
 #output .label{
     color:var(--accent);
-    font-size:14px; /* 生成画面は大きく */
+    font-size:14px;
 }
 
 #output .value{
-    font-size:20px; /* 生成画面は大きく */
+    font-size:16px; /* 少し小さく */
     color:var(--main);
 }
 
@@ -165,7 +163,7 @@ button{
     padding:8px;
     text-align:left;
     box-shadow:0 0 8px var(--main);
-    font-size:10px; /* 小さく */
+    font-size:10px;
 }
 
 .cardFav{
@@ -183,14 +181,13 @@ button{
     right:8px;
 }
 
-/* 都市カード内容を左右2カラム */
 .cardContent{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:6px;
 }
 
-/* ★履歴カードの文字色は生成時モードに連動 */
+/* 履歴カード文字色を生成時モードに連動 */
 .card.cyberpunk .label{ color:#FF00FF; }
 .card.cyberpunk .value{ color:#00FFFF; }
 
