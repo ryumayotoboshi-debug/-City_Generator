@@ -68,26 +68,26 @@ button{ background:black; color:var(--main); border:1px solid var(--main); font-
 </style>
 
 <style>
-/* ▼生成画面の微調整（既存を壊さない上書き） */
+/* ▼生成画面の微調整（正しく効く版） */
 
 /* 全体を少し上に */
-#mainView {
+#mainScreen {
   transform: translateY(-6px);
 }
 
 /* 見出し */
-.result-title {
-  font-size: 10px;
+#output .label {
+  font-size: 11px; /* 少し小さく */
 }
 
 /* 要素 */
-.result-text {
-  font-size: 8px;
+#output .value {
+  font-size: 13px; /* 少し小さく */
 }
 
 /* 項目間の余白 */
-.result-item {
-  margin-bottom: 5px; /* 元より少しだけ狭く */
+#output .group {
+  margin-bottom: 10px;
 }
 </style>
 
